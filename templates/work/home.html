@@ -1,1 +1,10 @@
-help
+{% extends 'work/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p>This is your home page.</p>
+    </div>
+{% endblock %}
