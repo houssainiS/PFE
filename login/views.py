@@ -12,7 +12,7 @@ def register(request):
         if form.is_valid():
             user = form.save()  # Save the user, `role` will be null by default
             login(request, user)  # Automatically log the user in after registration
-            return redirect('index')  # Redirect to home or dashboard page
+            return redirect('work:home')  # Redirect to home or dashboard page
     else:
         form = CustomUserCreationForm()
     return render(request, 'login/register.html', {'form': form})
@@ -24,7 +24,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('index')  # Redirect after successful login
+            return redirect('work:home')  # Redirect after successful login
         else:
             return render(request, 'login/login.html', {'error': 'Invalid credentials'})
     return render(request, 'login/login.html')
