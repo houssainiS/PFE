@@ -6,5 +6,12 @@
     <div class="container">
         <h2>Welcome, {{ user.username }}!</h2>
         <p>This is your home page.</p>
+
+        
+        
+    </div>
+    <div class="buttons">
+        <a href="{% url 'work:simple_mode' user.id %}">Simple Mode</a>
+        <a href="{% url 'work:advanced_mode' user.id %}">Advanced Mode</a>
     </div>
 {% endblock %}

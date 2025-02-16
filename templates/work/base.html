@@ -15,8 +15,8 @@
             <nav>
                 <ul>
                     <li><a href="{% url 'work:home' user.id %}">Home</a></li>
-                    <li><a href="">about</a></li>
-                    <li><a href="">info</a></li>
+                    <li><a href="">templates</a></li>
+                    <li><a href="">history</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'work:logout' %}">Logout</a></li>
                     {% endif %}
