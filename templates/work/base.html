@@ -11,30 +11,26 @@
 </head>
 <body>
 
-    <header>
-        <div class="container">
-            <h1>My Website</h1>
-            <nav>
-                <ul>
-                    <li><a href="{% url 'work:home' user.id %}">Home</a></li>
+    <header class="header">
+        <div class="logo">Houssaini</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'work:home' user.id %}">Home</a></li>
                     <li><a href="">templates</a></li>
                     <li><a href="">history</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'work:logout' %}">Logout</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
+                    {% endif %}    
+            </ul>
+        </nav>
     </header>
+
 
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2025 My Website. All rights reserved.</p>
-    </footer>
-
+   
 </body>
 </html>
