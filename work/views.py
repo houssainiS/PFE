@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404 
 from django.contrib.auth.decorators import login_required
 from login.models import User  # Import your custom User model
+
+from django.http import HttpResponse
 
 # Ensure user is authenticated before accessing views
 @login_required(login_url='login')  # Redirect to login if not authenticated
@@ -23,3 +25,10 @@ def advanced_mode(request, user_id):
     if user != request.user:
         return redirect('home', user_id=request.user.id)  
     return render(request, 'work/advancedMode.html', {'user': user})
+
+
+
+def getResponse(request, user_id):  # Add user_id parameter
+    userMessage = request.GET.get('userMessage')  # Get user message from AJAX request
+    chatResponse = 'hello it me'  # Example response
+    return HttpResponse(chatResponse)

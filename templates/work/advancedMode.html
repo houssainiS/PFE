@@ -7,4 +7,39 @@
 
 <h1>Advanced Mode</h1>
 
+<div class="show">
+
+</div>
+
+<h1>chatbot</h1>
+    <div id="chatbot">
+        <p class="botText"><span>HI there !</span></p>
+    </div>
+    <div id="userInput">
+        <input type="text" name="userMessage" placeholder="Type your message..." id="textInput">
+        <input type="submit" value="Send" id="buttonInput" >
+
+
+    </div>
+
+
+    <script>
+        function getUserResponse(){
+            var userText= $("#textInput").val();
+            var userHTML = "<p class='userText'>User : <span>"+userText+"</span></p>";
+            $('#textInput').val('');
+            $('#chatbot').append(userHTML);
+
+            $.get(window.location.pathname + "getResponse", { userMessage: userText }).done(function(data) {
+    var returnedMessage = "<p class='botText'>Chatbot: <span>" + data + "</span></p>";
+    $("#chatbot").append(returnedMessage);
+    $("#chatbot").scrollTop($("#chatbot")[0].scrollHeight); // Auto-scroll
+});
+
+        }
+        
+        $("#buttonInput").click(function(){
+            getUserResponse();
+        })
+    </script>
 {% endblock %}
