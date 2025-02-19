@@ -1,88 +1,95 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background: #f4f4f4;
-    text-align: center;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
 .container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    padding: 30px;
+    padding-top: 50px;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
 }
 
-h1, h2 {
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
     color: #333;
+    font-weight: 600;
 }
 
-/* Header */
-header {
-    background: #007bff;
-    color: white;
-    padding: 15px;
-    text-align: center;
-}
-
-nav a {
-    color: black;
-    text-decoration: none;
-    font-size: 18px;
-    margin-left: 20px;
-}
-
-/* Hero Section */
-.hero {
-    margin: 50px auto;
-    text-align: center;
-}
-
-#cta-button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-/* Forms */
 form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
-input {
-    width: 100%;
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="username"] {
     padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100%;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #5c6bc0;
+    outline: none;
 }
 
 button {
-    background: #007bff;
-    color: white;
-    padding: 10px;
+    padding: 12px;
+    background-color: #5c6bc0;
     border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
     cursor: pointer;
-    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background: #0056b3;
+    background-color: #3f4a8a;
 }
 
-/* Footer */
-footer {
-    margin-top: 50px;
-    padding: 20px;
-    background: #333;
-    color: white;
-    text-align: center;
+p {
+    color: #777;
+    font-size: 14px;
+}
+
+a {
+    color: #5c6bc0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
 }

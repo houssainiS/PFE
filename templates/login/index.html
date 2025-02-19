@@ -5,28 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Page</title>
     {% load static %}
-    <link rel="stylesheet" href="{%static 'css/login_style.css'%}">
+    <link rel="stylesheet" href="{%static 'css/welcome.css'%}">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Welcome to Our Website</h1>
-            <nav>
-                <a href="{% url 'login'%}">Login</a>
-            </nav>
-        </div>
+    <header class="header">
+        <div class="logo">Houssaini</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a class="login-btn" href="{% url 'login'%}">login</a></li>
+            </ul>
+        </nav>
     </header>
-    <main>
-        <section class="hero">
-            <h2>We are glad to have you here!</h2>
-            <p>Explore our website and enjoy the experience.</p>
-            <button id="cta-button">Get Started</button>
-        </section>
-    </main>
+
+    <!-- Home Section -->
+    <section id="home">
+        <h2>Welcome to MyWebsite</h2>
+        <p class="section-content">This is the home section of the website. You can add an introduction or any other content here.</p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Us</h2>
+        <p class="section-content">We are a company that provides high-quality services to our clients. Our team is dedicated to ensuring the best experience for everyone.</p>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <h2>Our Services</h2>
+        <p class="section-content">We offer a variety of services tailored to meet your needs. Whether you're looking for web development, design, or consulting, we have you covered.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p class="section-content">Get in touch with us for any inquiries or support. We're here to help!</p>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Welcome Inc.</p>
+        <p>&copy; 2025 MyWebsite. All rights reserved.</p>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
     </footer>
 
-    <script src="script.js"></script>
-</body>
+    <script>
+        let lastScrollTop = 0; // Track the last scroll position
+        const header = document.querySelector('.header');
+
+        window.addEventListener('scroll', function () {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScroll > lastScrollTop) {
+                // Scrolling down
+                header.style.top = "-80px"; // Hide header
+            } else {
+                // Scrolling up
+                header.style.top = "0"; // Show header
+            }
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+        });
+    </script>
+</body> 
 </html>

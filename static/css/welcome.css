@@ -1,0 +1,117 @@
+* {
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    padding-top: 60px; /* Add padding to prevent the header from covering content */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(51, 51, 51, 0.1); /* 0.1 opacity */ /* Initially invisible */
+    padding: 10px 30px 5px 30px;
+    box-shadow: none;
+    transition: all 0.3s ease-in-out;
+    position: fixed; /* Fix the header at the top */
+    top: 0; /* Align it to the top */
+    left: 0;
+    width: 100%; /* Ensure the header spans the full width */
+    z-index: 10; /* Ensure the header stays on top of other elements */
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    margin: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+/* Header becomes visible when hovered */
+.header:hover {
+    background-color: rgba(51, 51, 51, 0.8); /* 0.5 opacity for the background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Make links white when the header is hovered */
+.header:hover .logo, .header:hover .nav-links a {
+    color: #fff;
+}
+
+/* Make the links orange when hovered over individually */
+.nav-links a:hover {
+    color: #08a0e9 !important; /* Orange color on individual hover */
+}
+
+/* Section styles */
+section {
+    padding: 60px 30px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 30px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.section-content {
+    font-size: 18px;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+footer a {
+    color: #f39c12;
+    text-decoration: none;
+    margin: 0 15px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.login-btn{
+    border: 1px solid black !important;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-right: 40px;
+    margin-left: 5px;
+    background-color: #08a0e9 !important;
+    color: white !important
+}
+.login-btn:hover{
+    background-color: #333 !important;
+}
