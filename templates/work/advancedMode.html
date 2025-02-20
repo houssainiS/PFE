@@ -86,10 +86,10 @@
         $("#textInput").val("").focus(); // Clear input and focus
 
         $.get(window.location.pathname + "getResponse", { userMessage: userText }).done(function (data) {
-            var returnedMessage = "<p class='botText'>Chatbot: <span>" + data + "</span></p>";
-            $("#chatbot").append(returnedMessage);
-            $("#chatbot").scrollTop($("#chatbot")[0].scrollHeight); // Auto-scroll
-        });
+    var returnedMessage = "<p class='botText'>Chatbot: <span>" + data.response + "</span></p>";
+    $("#chatbot").append(returnedMessage);
+    $("#chatbot").scrollTop($("#chatbot")[0].scrollHeight); // Auto-scroll
+});
 
         $("#buttonInput").prop("disabled", true); // Disable button after sending
     }
