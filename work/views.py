@@ -4,14 +4,24 @@ from login.models import User  # Import your custom User model
 import openai
 from django.http import JsonResponse
 import environ
+from django.core.exceptions import ImproperlyConfigured
 # Initialize environ
 env = environ.Env()
-environ.Env.read_env()  # Reading the .env file
+import os
+# Specify the full path to the .env file
+env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+environ.Env.read_env(env_file)
 
+#temprary
+import os
+from django.http import HttpResponse
 
 # AI API settings
 
-openai.api_key = env('OPENAI_API_KEY')
+try:
+    openai.api_key = env('OPENAI_API_KEY')
+except KeyError:
+    raise ImproperlyConfigured("Set the OPENAI_API_KEY environment variable")
 
 def ask_openai(message):
     response = openai.chat.completions.create(
