@@ -3,111 +3,103 @@
 {% block title %}Advanced Mode{% endblock %}
 
 {% block content %}
+    <div id="generatedContent" class="generated-content">
+        <!-- This iframe will display the generated website -->
+        <iframe id="websitePreview" class="website-preview"></iframe>
+    </div>
 
-<style>
-    #chatbot {
-        margin-left: auto;
-        margin-right: auto;
-        width: 70%;
-        margin-top: 50px;
-        border-radius: 10px;
-        border: 1px solid gray;
-        padding: 10px;
-        max-height: 300px;
-        overflow-y: auto;
-    }
+    <div class="input-container">
+        <input type="text" id="userMessage" class="user-input" placeholder="Describe your website..." />
+        <button onclick="generateWebsite()" class="generate-button">
+            Generate
+        </button>
+    </div>
 
-    .botText, .userText {
-        font-family: monospace;
-        font-size: 14px;
-        line-height: 25px;
-        color: rgb(109, 111, 109);
-    }
+    <script>
+        function generateWebsite() {
+            const userMessage = document.getElementById('userMessage').value;
+            const userId = '{{ user.id }}';  // Ensure this is passed to the template
 
-    .userText {
-        text-align: right;
-    }
-
-    #userInput {
-        margin-left: auto;
-        margin-right: auto;
-        width: 70%;
-        margin-top: 40px;
-        text-align: center;
-    }
-
-    #textInput {
-        border: 3px solid white;
-        border-bottom: 3px solid #afafaf;
-        font-family: monospace;
-        font-size: 14px;
-        width: 60%;
-        padding: 16px;
-        color: rgb(213, 67, 41);
-        outline: none;
-    }
-
-    #buttonInput {
-        padding: 5px;
-        font-family: monospace;
-        font-size: 14px;
-        border: solid 3px #5b605c;
-        background-color: rgb(40, 48, 40);
-        color: white;
-        border-radius: 10px;
-        cursor: pointer;
-    }
-
-    h1 {
-        text-align: center;
-        color: rgb(57, 72, 57);
-    }
-</style>
-
-<h1>Advanced Mode</h1>
-
-<div id="chatbot">
-    <p class="botText"><span>Hi there!</span></p>
-</div>
-
-<div id="userInput">
-    <input type="text" name="userMessage" placeholder="Type your message..." id="textInput">
-    <input type="submit" value="Send" id="buttonInput" disabled>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    function getUserResponse() {
-        var userText = $("#textInput").val().trim();
-        if (userText === "") return; // Prevent empty input
-
-        var userHTML = "<p class='userText'>User: <span>" + userText + "</span></p>";
-        $("#chatbot").append(userHTML);
-        $("#textInput").val("").focus(); // Clear input and focus
-
-        $.get(window.location.pathname + "getResponse", { userMessage: userText }).done(function (data) {
-    var returnedMessage = "<p class='botText'>Chatbot: <span>" + data.response + "</span></p>";
-    $("#chatbot").append(returnedMessage);
-    $("#chatbot").scrollTop($("#chatbot")[0].scrollHeight); // Auto-scroll
-});
-
-        $("#buttonInput").prop("disabled", true); // Disable button after sending
-    }
-
-    $(document).ready(function () {
-        $("#textInput").on("input", function () {
-            $("#buttonInput").prop("disabled", $(this).val().trim() === "");
-        });
-
-        $("#buttonInput").click(getUserResponse);
-
-        $("#textInput").keypress(function (event) {
-            if (event.which === 13 && !$("#buttonInput").prop("disabled")) { // Enter key
-                event.preventDefault();
-                getUserResponse();
+            if (userMessage.trim() === "") {
+                alert("Please enter a description.");
+                return;
             }
-        });
-    });
-</script>
 
+            fetch(`/work/${userId}/advancedMode/getResponse?userMessage=${encodeURIComponent(userMessage)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const iframe = document.getElementById('websitePreview');
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+                    iframeDoc.open();
+                    iframeDoc.write(data.body); // Inject the body content
+                    iframeDoc.close();
+
+                    // Inject CSS directly to body as inline styles
+                    const css = data.css.replace(/<style.*?>|<\/style>/g, ""); // Clean style tags
+                    const styleTag = iframeDoc.createElement('style');
+                    styleTag.innerHTML = css;
+                    iframeDoc.head.appendChild(styleTag);
+
+                    // Inject JS properly
+                    let script = iframeDoc.createElement("script");
+                    script.innerHTML = data.js.replace(/<script.*?>|<\/script>/g, ""); // Clean script tags
+                    iframeDoc.body.appendChild(script);
+                })
+                .catch(error => {
+                    console.error("Error generating website:", error);
+                    alert("An error occurred while generating the website.");
+                });
+        }
+    </script>
+
+    <style>
+        .generated-content {
+            width: 100%;
+            height: 80vh;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .website-preview {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .user-input {
+            padding: 12px;
+            width: 60%;
+            margin-right: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .generate-button {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .generate-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 {% endblock %}
