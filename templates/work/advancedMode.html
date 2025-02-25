@@ -18,7 +18,6 @@
 
     <input type="text" id="userMessage" class="user-input" placeholder="Describe your website..." />
     
-    
     <button onclick="generateWebsite()" class="generate-button">
         Generate
     </button>
@@ -84,6 +83,7 @@ function generateWebsite() {
 </script>
 
 <style>
+    html, body { overflow-x: hidden; }
     .generated-content {
         width: 100%;
         height: 80vh;
@@ -105,11 +105,12 @@ function generateWebsite() {
         justify-content: center;
         align-items: center;
         margin-top: 20px;
+        flex-wrap: wrap; /* Allow the elements to wrap to the next line */
     }
 
     .user-input {
         padding: 12px;
-        width: 60%;
+        width: 50%; /* Adjust width to avoid overflow */
         margin-right: 15px;
         font-size: 16px;
         border: 1px solid #ddd;
