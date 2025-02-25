@@ -3,6 +3,10 @@
 {% block title %}Advanced Mode{% endblock %}
 
 {% block content %}
+<div id="loadingIndicator" class="loading-spinner" style="display: none;">
+    Generating...
+</div>
+
     <div id="generatedContent" class="generated-content">
         <!-- This iframe will display the generated website -->
         <iframe id="websitePreview" class="website-preview"></iframe>
@@ -16,41 +20,62 @@
     </div>
 
     <script>
-        function generateWebsite() {
-            const userMessage = document.getElementById('userMessage').value;
-            const userId = '{{ user.id }}';  // Ensure this is passed to the template
-
-            if (userMessage.trim() === "") {
-                alert("Please enter a description.");
-                return;
-            }
-
-            fetch(`/work/${userId}/advancedMode/getResponse?userMessage=${encodeURIComponent(userMessage)}`)
-                .then(response => response.json())
-                .then(data => {
-                    const iframe = document.getElementById('websitePreview');
-                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-                    iframeDoc.open();
-                    iframeDoc.write(data.body); // Inject the body content
-                    iframeDoc.close();
-
-                    // Inject CSS directly to body as inline styles
-                    const css = data.css.replace(/<style.*?>|<\/style>/g, ""); // Clean style tags
-                    const styleTag = iframeDoc.createElement('style');
-                    styleTag.innerHTML = css;
-                    iframeDoc.head.appendChild(styleTag);
-
-                    // Inject JS properly
-                    let script = iframeDoc.createElement("script");
-                    script.innerHTML = data.js.replace(/<script.*?>|<\/script>/g, ""); // Clean script tags
-                    iframeDoc.body.appendChild(script);
-                })
-                .catch(error => {
-                    console.error("Error generating website:", error);
-                    alert("An error occurred while generating the website.");
-                });
+     document.getElementById('userMessage').addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Prevent form submission (if any)
+            generateWebsite();
         }
+    });
+
+    function generateWebsite() {
+        const userMessage = document.getElementById('userMessage');
+        const userId = '{{ user.id }}';
+        const generateButton = document.querySelector('.generate-button');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        if (userMessage.value.trim() === "") {
+            alert("Please enter a description.");
+            return;
+        }
+
+        // Show loading state
+        generateButton.innerHTML = "Loading...";
+        generateButton.disabled = true;
+        userMessage.disabled = true; // Disable input during loading
+        loadingIndicator.style.display = "block"; // Show loading indicator
+
+        fetch(`/work/${userId}/advancedMode/getResponse?userMessage=${encodeURIComponent(userMessage.value)}`)
+            .then(response => response.json())
+            .then(data => {
+                const iframe = document.getElementById('websitePreview');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+                iframeDoc.open();
+                iframeDoc.write(data.body);
+                iframeDoc.close();
+
+                const css = data.css.replace(/<style.*?>|<\/style>/g, "");
+                const styleTag = iframeDoc.createElement('style');
+                styleTag.innerHTML = css;
+                iframeDoc.head.appendChild(styleTag);
+
+                let script = iframeDoc.createElement("script");
+                script.innerHTML = data.js.replace(/<script.*?>|<\/script>/g, "");
+                iframeDoc.body.appendChild(script);
+            })
+            .catch(error => {
+                console.error("Error generating website:", error);
+                alert("An error occurred while generating the website.");
+            })
+            .finally(() => {
+                // Restore button and input state
+                generateButton.innerHTML = "Generate";
+                generateButton.disabled = false;
+                userMessage.disabled = false; // Re-enable input
+                loadingIndicator.style.display = "none"; // Hide loading indicator
+            });
+    }
+
     </script>
 
     <style>
@@ -101,5 +126,21 @@
         .generate-button:hover {
             background-color: #45a049;
         }
+
+        .loading-spinner {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #4CAF50;
+    margin: 20px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
     </style>
 {% endblock %}

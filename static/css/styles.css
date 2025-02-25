@@ -63,7 +63,7 @@ body {
 
 /* Make the links orange when hovered over individually */
 .nav-links a:hover {
-    color: #f39c12 !important; /* Orange color on individual hover */
+    color: #08a0e9 !important; /* Orange color on individual hover */
 }
 
 /* Section styles */
@@ -95,7 +95,7 @@ footer {
 }
 
 footer a {
-    color: #f39c12;
+    color: #08a0e9;
     text-decoration: none;
     margin: 0 15px;
 }
