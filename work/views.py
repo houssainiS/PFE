@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from login.models import User  # Import your custom User model
+from login.models import User
 import openai
 from django.http import JsonResponse
 import environ
@@ -19,8 +19,30 @@ try:
 except KeyError:
     raise ImproperlyConfigured("Set the OPENAI_API_KEY environment variable")
 
+# DALL·E 2 image generation function
+from openai import OpenAI
+client = OpenAI()
+def ask_dalle_2(prompt):
+    """Generates an image from DALL·E 2 based on the given prompt using the new API."""
+    try:
+        # Make the API call to generate the image
+        response = client.images.generate(
+            prompt=prompt,  # Use the prompt provided
+            size="256x256",  # Use supported size (256x256)
+            quality="standard",  # Quality setting
+            n=1,
+        )
+        
+        # Extract the URL of the generated image
+        image_url = response.data[0].url
+        
+        print(f"Image generated for prompt: {prompt}")
+        return image_url
+    except Exception as e:
+        print(f"Error generating image: {str(e)}")
+        return None
 def ask_openai(message):
-    # Adjust the prompt to request specific code generation
+    """Generates the HTML, CSS, and JS from OpenAI based on user input."""
     prompt = f"Please generate the complete HTML code for a website based on the following description: {message}. Only include the contents inside the `<body>`, `<script>`, and `<style>` tags. The `<style>` tag should include the necessary CSS for layout, colors, fonts, and spacing, or be left empty if no styles are needed. The `<script>` tag should contain any JavaScript functionality, or be left empty if no JavaScript is required. Do not include the overall HTML structure, such as `<html>`, `<head>`, or external file references (no `<link>` or `<script src=...>` tags). Only provide the contents inside the `<body>`, `<script>`, and `<style>` tags."
 
     response = openai.chat.completions.create(
@@ -30,51 +52,69 @@ def ask_openai(message):
         temperature=0.5,
     )
     return response.choices[0].message.content.strip()
- 
-#excrat the code needed in html 
-
-
-
 def extract_code_parts(ai_response):
     """Extract only the CSS, JavaScript, and HTML body content from the AI response."""
     
-    # Print the full AI response for debugging
     print("Full AI response:")
     print(ai_response)
     print("\n" + "="*50 + "\n")  # Separator for better readability
 
-    # Remove Markdown code block delimiters (```), ensuring we handle it correctly
     ai_response = re.sub(r"```(html|css|javascript)?\s*([\s\S]*?)```", r"\2", ai_response)
 
-    # Improved regex for extracting body, style, and script sections
-    body_match = re.search(r"<body[\s\S]*?</body>", ai_response, re.DOTALL | re.IGNORECASE)  # Match the <body> content
-    css_match = re.search(r"<style[\s\S]*?</style>", ai_response, re.DOTALL | re.IGNORECASE)  # Match the <style> content
-    js_match = re.search(r"<script[\s\S]*?</script>", ai_response, re.DOTALL | re.IGNORECASE)  # Match the <script> content
+    body_match = re.search(r"<body[\s\S]*?</body>", ai_response, re.DOTALL | re.IGNORECASE)
+    css_match = re.search(r"<style[\s\S]*?</style>", ai_response, re.DOTALL | re.IGNORECASE)
+    js_match = re.search(r"<script[\s\S]*?</script>", ai_response, re.DOTALL | re.IGNORECASE)
 
-    # Extract the content
     body_content = body_match.group(0) if body_match else "No body content found."
     css_content = css_match.group(0) if css_match else "No CSS content found."
     js_content = js_match.group(0) if js_match else "No JS content found."
+    body_before = body_content 
+    # Check if there are image tags in the body content
+    img_tags = re.findall(r'<img [^>]*src="([^"]+)', body_content)
+    print(f"Found {len(img_tags)} image(s) in the body content.")
 
-    # Print the extracted content for debugging
-    print("Body Content:")
+    # Replace image sources with generated URLs
+    for img_tag in img_tags:
+        generated_image_url = ask_dalle_2(img_tag)  # Generate the image based on the prompt
+        if generated_image_url:
+            body_content = body_content.replace(img_tag, generated_image_url)
+
+    # Print the body content after replacements
+    print("\nModified Body Content After Replacing Image URLs:")
     print(body_content)
-    print("\nCSS Content:")
-    print(css_content)
-    print("\nJS Content:")
-    print(js_content)
 
     return {
         "body": body_content,
         "css": css_content,
-        "js": js_content
+        "js": js_content,
+        "images": img_tags  # Returning the list of image URLs found
     }
 
+
+def get_ai_response(request, user_id):
+    user_message = request.GET.get("userMessage", "")
+    if not user_message:
+        return JsonResponse({"error": "No message provided"}, status=400)
+
+    ai_response = ask_openai(user_message)
+    extracted_code = extract_code_parts(ai_response)
+
+    # Check if there are any image URLs to generate
+    if extracted_code["images"]:
+        for img_prompt in extracted_code["images"]:
+            image_url = ask_dalle_2(img_prompt)  # Generate the image based on the prompt
+            if image_url:
+                print(f"Generated image URL: {image_url}")
+                # You can add the image URL to the extracted code dictionary if needed
+                extracted_code["generated_images"] = extracted_code.get("generated_images", []) + [image_url]
+
+    return JsonResponse(extracted_code)
+
 # Ensure user is authenticated before accessing views
-@login_required(login_url='login')  # Redirect to login if not authenticated
+@login_required(login_url='login')
 def home(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    if user != request.user:  # Prevent access to other users' pages
+    if user != request.user:
         return redirect('home', user_id=request.user.id)
     return render(request, 'work/home.html', {'user': user})
 
@@ -91,30 +131,3 @@ def advanced_mode(request, user_id):
     if user != request.user:
         return redirect('home', user_id=request.user.id)
     return render(request, 'work/advancedMode.html', {'user': user})
-
-# def getResponse(request, user_id):
-#     user_message = request.GET.get('userMessage', '')
-
-#     if not user_message:
-#         return JsonResponse({"response": "Please enter a message."})
-
-#     try:
-#         # Get the response from OpenAI (adjusted prompt to ask for actual code)
-#         chat_response = ask_openai(user_message)
-#     except Exception as e:
-#         chat_response = f"Error: {str(e)}"
-
-#     # Return the generated HTML/CSS/JS code from OpenAI
-#     return JsonResponse({"response": chat_response})
-
-#testing
-
-def get_ai_response(request, user_id):
-    user_message = request.GET.get("userMessage", "")
-    if not user_message:
-        return JsonResponse({"error": "No message provided"}, status=400)
-
-    ai_response = ask_openai(user_message)
-    extracted_code = extract_code_parts(ai_response)
-
-    return JsonResponse(extracted_code)
