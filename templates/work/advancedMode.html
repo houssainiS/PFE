@@ -7,140 +7,144 @@
     Generating...
 </div>
 
-    <div id="generatedContent" class="generated-content">
-        <!-- This iframe will display the generated website -->
-        <iframe id="websitePreview" class="website-preview"></iframe>
-    </div>
+<div id="generatedContent" class="generated-content">
+    <!-- This iframe will display the generated website -->
+    <iframe id="websitePreview" class="website-preview"></iframe>
+</div>
 
-    <div class="input-container">
-        <input type="text" id="userMessage" class="user-input" placeholder="Describe your website..." />
-        <button onclick="generateWebsite()" class="generate-button">
-            Generate
-        </button>
-    </div>
+<div class="input-container">
+    <label for="imageSwitch" style="margin-left: 10px;">Generate Images</label>
+    <input type="checkbox" style="margin-left: 10px;margin-right: 10px;" id="imageSwitch" class="image-switch" />
 
-    <script>
-     document.getElementById('userMessage').addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Prevent form submission (if any)
-            generateWebsite();
-        }
-    });
+    <input type="text" id="userMessage" class="user-input" placeholder="Describe your website..." />
+    
+    
+    <button onclick="generateWebsite()" class="generate-button">
+        Generate
+    </button>
+</div>
 
-    function generateWebsite() {
-        const userMessage = document.getElementById('userMessage');
-        const userId = '{{ user.id }}';
-        const generateButton = document.querySelector('.generate-button');
-        const loadingIndicator = document.getElementById('loadingIndicator');
+<script>
+document.getElementById('userMessage').addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevent form submission (if any)
+        generateWebsite();
+    }
+});
 
-        if (userMessage.value.trim() === "") {
-            alert("Please enter a description.");
-            return;
-        }
+function generateWebsite() {
+    const userMessage = document.getElementById('userMessage');
+    const userId = '{{ user.id }}';
+    const generateButton = document.querySelector('.generate-button');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const generateImages = document.getElementById('imageSwitch').checked; // Get the switch status
 
-        // Show loading state
-        generateButton.innerHTML = "Loading...";
-        generateButton.disabled = true;
-        userMessage.disabled = true; // Disable input during loading
-        loadingIndicator.style.display = "block"; // Show loading indicator
-
-        fetch(`/work/${userId}/advancedMode/getResponse?userMessage=${encodeURIComponent(userMessage.value)}`)
-            .then(response => response.json())
-            .then(data => {
-                const iframe = document.getElementById('websitePreview');
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-                iframeDoc.open();
-                iframeDoc.write(data.body);
-                iframeDoc.close();
-
-                const css = data.css.replace(/<style.*?>|<\/style>/g, "");
-                const styleTag = iframeDoc.createElement('style');
-                styleTag.innerHTML = css;
-                iframeDoc.head.appendChild(styleTag);
-
-                let script = iframeDoc.createElement("script");
-                script.innerHTML = data.js.replace(/<script.*?>|<\/script>/g, "");
-                iframeDoc.body.appendChild(script);
-            })
-            .catch(error => {
-                console.error("Error generating website:", error);
-                alert("An error occurred while generating the website.");
-            })
-            .finally(() => {
-                // Restore button and input state
-                generateButton.innerHTML = "Generate";
-                generateButton.disabled = false;
-                userMessage.disabled = false; // Re-enable input
-                loadingIndicator.style.display = "none"; // Hide loading indicator
-            });
+    if (userMessage.value.trim() === "") {
+        alert("Please enter a description.");
+        return;
     }
 
-    </script>
+    // Show loading state
+    generateButton.innerHTML = "Loading...";
+    generateButton.disabled = true;
+    userMessage.disabled = true; // Disable input during loading
+    loadingIndicator.style.display = "block"; // Show loading indicator
 
-    <style>
-        .generated-content {
-            width: 100%;
-            height: 80vh;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    fetch(`/work/${userId}/advancedMode/getResponse?userMessage=${encodeURIComponent(userMessage.value)}&generateImages=${generateImages}`)
+        .then(response => response.json())
+        .then(data => {
+            const iframe = document.getElementById('websitePreview');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-        .website-preview {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 8px;
-        }
+            iframeDoc.open();
+            iframeDoc.write(data.body);
+            iframeDoc.close();
 
-        .input-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
+            const css = data.css.replace(/<style.*?>|<\/style>/g, "");
+            const styleTag = iframeDoc.createElement('style');
+            styleTag.innerHTML = css;
+            iframeDoc.head.appendChild(styleTag);
 
-        .user-input {
-            padding: 12px;
-            width: 60%;
-            margin-right: 15px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        .generate-button {
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            background-color: #4CAF50;
-            color: white;
-            transition: background-color 0.3s ease;
-        }
-
-        .generate-button:hover {
-            background-color: #45a049;
-        }
-
-        .loading-spinner {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #4CAF50;
-    margin: 20px;
-    animation: blink 1s infinite;
+            let script = iframeDoc.createElement("script");
+            script.innerHTML = data.js.replace(/<script.*?>|<\/script>/g, "");
+            iframeDoc.body.appendChild(script);
+        })
+        .catch(error => {
+            console.error("Error generating website:", error);
+            alert("An error occurred while generating the website.");
+        })
+        .finally(() => {
+            // Restore button and input state
+            generateButton.innerHTML = "Generate";
+            generateButton.disabled = false;
+            userMessage.disabled = false; // Re-enable input
+            loadingIndicator.style.display = "none"; // Hide loading indicator
+        });
 }
+</script>
 
-@keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
+<style>
+    .generated-content {
+        width: 100%;
+        height: 80vh;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-    </style>
+    .website-preview {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 8px;
+    }
+
+    .input-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .user-input {
+        padding: 12px;
+        width: 60%;
+        margin-right: 15px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    .generate-button {
+        padding: 12px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        background-color: #4CAF50;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .generate-button:hover {
+        background-color: #45a049;
+    }
+
+    .loading-spinner {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #4CAF50;
+        margin: 20px;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+</style>
 {% endblock %}

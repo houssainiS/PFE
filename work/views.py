@@ -22,6 +22,7 @@ except KeyError:
 # DALL·E 2 image generation function
 from openai import OpenAI
 client = OpenAI()
+
 def ask_dalle_2(prompt):
     """Generates an image from DALL·E 2 based on the given prompt using the new API."""
     try:
@@ -41,6 +42,7 @@ def ask_dalle_2(prompt):
     except Exception as e:
         print(f"Error generating image: {str(e)}")
         return None
+
 def ask_openai(message):
     """Generates the HTML, CSS, and JS from OpenAI based on user input."""
     prompt = f"Please generate the complete HTML code for a website based on the following description: {message}. Only include the contents inside the `<body>`, `<script>`, and `<style>` tags. The `<style>` tag should include the necessary CSS for layout, colors, fonts, and spacing, or be left empty if no styles are needed. The `<script>` tag should contain any JavaScript functionality, or be left empty if no JavaScript is required. Do not include the overall HTML structure, such as `<html>`, `<head>`, or external file references (no `<link>` or `<script src=...>` tags). Only provide the contents inside the `<body>`, `<script>`, and `<style>` tags."
@@ -52,8 +54,9 @@ def ask_openai(message):
         temperature=0.5,
     )
     return response.choices[0].message.content.strip()
-def extract_code_parts(ai_response):
-    """Extract only the CSS, JavaScript, and HTML body content from the AI response."""
+
+def extract_code_parts(ai_response, generate_images):
+    """Extract only the CSS, JavaScript, and HTML body content from the AI response and generate images if needed."""
     
     print("Full AI response:")
     print(ai_response)
@@ -68,47 +71,39 @@ def extract_code_parts(ai_response):
     body_content = body_match.group(0) if body_match else "No body content found."
     css_content = css_match.group(0) if css_match else "No CSS content found."
     js_content = js_match.group(0) if js_match else "No JS content found."
-    body_before = body_content 
-    # Check if there are image tags in the body content
-    img_tags = re.findall(r'<img [^>]*src="([^"]+)', body_content)
-    print(f"Found {len(img_tags)} image(s) in the body content.")
+    
+    # Check if image generation is enabled and if there are image tags in the body content
+    if generate_images:
+        img_tags = re.findall(r'<img [^>]*src="([^"]+)', body_content)
+        print(f"Found {len(img_tags)} image(s) in the body content.")
 
-    # Replace image sources with generated URLs
-    for img_tag in img_tags:
-        generated_image_url = ask_dalle_2(img_tag)  # Generate the image based on the prompt
-        if generated_image_url:
-            body_content = body_content.replace(img_tag, generated_image_url)
+        # Replace image sources with generated URLs
+        for img_tag in img_tags:
+            generated_image_url = ask_dalle_2(img_tag)  # Generate the image based on the prompt
+            if generated_image_url:
+                body_content = body_content.replace(img_tag, generated_image_url)
 
-    # Print the body content after replacements
-    print("\nModified Body Content After Replacing Image URLs:")
-    print(body_content)
+        # Print the body content after replacements
+        print("\nModified Body Content After Replacing Image URLs:")
+        print(body_content)
 
     return {
         "body": body_content,
         "css": css_content,
-        "js": js_content,
-        "images": img_tags  # Returning the list of image URLs found
+        "js": js_content
     }
-
 
 def get_ai_response(request, user_id):
     user_message = request.GET.get("userMessage", "")
+    generate_images = request.GET.get("generateImages", "false").lower() == "true"  # Capture the image switch state
     if not user_message:
         return JsonResponse({"error": "No message provided"}, status=400)
 
     ai_response = ask_openai(user_message)
-    extracted_code = extract_code_parts(ai_response)
-
-    # Check if there are any image URLs to generate
-    if extracted_code["images"]:
-        for img_prompt in extracted_code["images"]:
-            image_url = ask_dalle_2(img_prompt)  # Generate the image based on the prompt
-            if image_url:
-                print(f"Generated image URL: {image_url}")
-                # You can add the image URL to the extracted code dictionary if needed
-                extracted_code["generated_images"] = extracted_code.get("generated_images", []) + [image_url]
+    extracted_code = extract_code_parts(ai_response, generate_images)  # Pass the generateImages flag
 
     return JsonResponse(extracted_code)
+
 
 # Ensure user is authenticated before accessing views
 @login_required(login_url='login')
