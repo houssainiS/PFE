@@ -10,4 +10,6 @@ urlpatterns = [
     path('<int:user_id>/advancedMode/', views.advanced_mode , name='advanced_mode'),
     path('<int:user_id>/advancedMode/getResponse/',views.get_ai_response, name='get_ai_response'),
     path('save/', views.save_generated_website, name='save_generated_website'),
+    path('<int:user_id>/history/', views.history, name='history'),
+    path('<int:user_id>/history/<int:website_id>/', views.view_saved_website, name='view_saved_website'),
 ]
