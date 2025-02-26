@@ -180,3 +180,10 @@ def view_code(request, user_id, website_id):
         'website': website,
         'code_lines': code_lines
     })
+
+
+#demo page
+
+def demo(request, user_id, website_id):
+    website = get_object_or_404(GeneratedWebsite, id=website_id)
+    return render(request, 'work/demo.html', {'website': website})

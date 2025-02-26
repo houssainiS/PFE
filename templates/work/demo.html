@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ website.title }}</title>
+    <style id="dynamic-style"></style> <!-- Empty style tag -->
+</head>
+<body>
+    {{ website.body|safe }}
+    
+    <script>
+        // Get the CSS content passed from Django (using safe filter to avoid auto-escaping)
+        var cssContent = "{{ website.css|escapejs }}";
+
+        // Append the CSS content to the dynamic <style> tag
+        var styleTag = document.getElementById('dynamic-style');
+        styleTag.innerHTML = cssContent;
+    </script>
+
+    <script>{{ website.js|safe }}</script> <!-- Your JS code -->
+</body>
+</html>

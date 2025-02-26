@@ -13,4 +13,5 @@ urlpatterns = [
     path('<int:user_id>/history/', views.history, name='history'),
     path('<int:user_id>/history/<int:website_id>/', views.view_saved_website, name='view_saved_website'),
     path('<int:user_id>/history/<int:website_id>/code', views.view_code, name='view_code'),
+    path('<int:user_id>/history/<int:website_id>/demo', views.demo, name='demo'),
 ]
