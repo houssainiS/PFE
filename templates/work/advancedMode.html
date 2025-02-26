@@ -27,13 +27,16 @@
 </div>
 
 <!-- Modal for entering title -->
+
 <div id="titlePopup" class="title-popup">
     <div class="popup-content">
         <p>Please enter a title:</p>
         <input type="text" id="titleInput" class="title-input" placeholder="Enter your title" />
         <button id="doneButton" class="done-button" onclick="closePopup()">Done</button>
+        <button id="cancelButton" class="cancel-button" onclick="closePopup()">Cancel</button> <!-- Cancel Button -->
     </div>
 </div>
+
 
 <script>
     document.getElementById('userMessage').addEventListener("keypress", function(event) {
@@ -104,14 +107,19 @@
     }
 
     // Function to close the popup and save the website
-    function closePopup() {
+    // Flag to track if the save action should happen
+let shouldSave = false;
+
+// Function to handle the Done button action
+function closePopup(save = false) {
     const title = document.getElementById('titleInput').value;
     const userMessage = document.getElementById('userMessage').value;
     const bodyContent = document.getElementById('websitePreview').contentWindow.document.body.innerHTML;  // Get body from iframe
     const cssContent = document.getElementById('websitePreview').contentWindow.document.querySelector('style').innerHTML || '';  // Get CSS from iframe
     const jsContent = document.getElementById('websitePreview').contentWindow.document.querySelector('script').innerHTML || '';  // Get JS from iframe
 
-    if (title.trim()) {
+    // Only save if save is true (for the Done button)
+    if (save && title.trim()) {
         // Send title, prompt, body, CSS, and JS to the server via AJAX
         const data = new FormData();
         data.append('title', title);
@@ -137,12 +145,18 @@
             console.error('Error saving website:', error);
             alert('Failed to save website.');
         });
-
-        document.getElementById('titlePopup').style.display = 'none'; // Close the modal
-    } else {
+    } else if (save) {
         alert('Please enter a title.');
     }
+
+    // Close the modal regardless of Done or Cancel action
+    document.getElementById('titlePopup').style.display = 'none';
 }
+
+// Event listeners for Done and Cancel buttons
+document.getElementById('doneButton').addEventListener('click', () => closePopup(true));  // Done button will trigger save
+document.getElementById('cancelButton').addEventListener('click', () => closePopup(false));  // Cancel button will not trigger save
+
 
 </script>
 
@@ -276,6 +290,21 @@
     .done-button:hover {
         background-color: #45a049;
     }
+
+    .cancel-button {
+    padding: 10px 20px;
+    background-color: #f44336; /* Red color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.cancel-button:hover {
+    background-color: #e53935;
+}
 
 </style>
 {% endblock %}
