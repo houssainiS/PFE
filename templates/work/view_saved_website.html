@@ -31,19 +31,35 @@
         display: block;
     }
 
-    .view-button {
+    /* Button styles */
+    .btn {
         display: inline-block;
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
+        padding: 12px 25px;
+        text-align: center;
+        border-radius: 8px;
         font-weight: bold;
+        text-decoration: none;
+        margin: 10px;
         transition: background-color 0.3s;
+        margin-bottom: -5px;
     }
 
-    .view-button:hover {
-        background-color: #45a049;
+    .btn-demo {
+        background-color: purple;
+        color: white;
+    }
+
+    .btn-demo:hover {
+        background-color: #7b3f98;
+    }
+
+    .btn-code {
+        background-color: grey;
+        color: white;
+    }
+
+    .btn-code:hover {
+        background-color: #595959;
     }
 </style>
 
@@ -82,5 +98,11 @@
         iframeDoc.head.appendChild(styleTag);
     });
 </script>
+
+<!-- Buttons for demo and code -->
+<div class="button-container" style="text-align: center;">
+    <a href="#" class="btn btn-demo">Demo</a>
+    <a href="{% url 'work:view_code' user.id website.id %}" class="btn btn-code" target="_blank">Code</a>
+</div>
 
 {% endblock %}

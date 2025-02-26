@@ -166,3 +166,17 @@ def history(request, user_id):
 def view_saved_website(request, user_id, website_id):
     website = get_object_or_404(GeneratedWebsite, id=website_id)
     return render(request, 'work/view_saved_website.html', {'website': website})
+
+
+
+#see code page
+def view_code(request, user_id, website_id):
+    website = get_object_or_404(GeneratedWebsite, id=website_id)
+
+    # Split the body content into lines
+    code_lines = website.body.splitlines() if website.body else []
+
+    return render(request, 'work/code.html', {
+        'website': website,
+        'code_lines': code_lines
+    })

@@ -12,4 +12,5 @@ urlpatterns = [
     path('save/', views.save_generated_website, name='save_generated_website'),
     path('<int:user_id>/history/', views.history, name='history'),
     path('<int:user_id>/history/<int:website_id>/', views.view_saved_website, name='view_saved_website'),
+    path('<int:user_id>/history/<int:website_id>/code', views.view_code, name='view_code'),
 ]
