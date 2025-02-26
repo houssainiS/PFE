@@ -7,7 +7,7 @@ import environ
 from django.core.exceptions import ImproperlyConfigured
 import os
 import re
-
+from .models import GeneratedWebsite
 # Initialize environ
 env = environ.Env()
 env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
@@ -126,3 +126,28 @@ def advanced_mode(request, user_id):
     if user != request.user:
         return redirect('home', user_id=request.user.id)
     return render(request, 'work/advancedMode.html', {'user': user})
+
+
+@login_required
+def save_generated_website(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        prompt = request.POST.get('prompt')
+        body = request.POST.get('body', '')  # Assuming body is passed via AJAX
+        css = request.POST.get('css', '')  # Optional, if you're passing css as well
+        js = request.POST.get('js', '')    # Optional, if you're passing js as well
+        
+        # Create a new GeneratedWebsite instance and save it
+        website = GeneratedWebsite.objects.create(
+            user=request.user,
+            title=title,
+            body=body,
+            css=css,
+            js=js,
+            prompt=prompt,
+        )
+
+        # Return a JSON response to indicate success
+        return JsonResponse({'message': 'Website saved successfully!'})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
