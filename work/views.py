@@ -173,14 +173,28 @@ def view_saved_website(request, user_id, website_id):
 def view_code(request, user_id, website_id):
     website = get_object_or_404(GeneratedWebsite, id=website_id)
 
-    # Split the body content into lines
-    code_lines = website.body.splitlines() if website.body else []
+    # Construct the full code including CSS, Body, and JS
+    full_code = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{website.title}</title>
+    <style>{website.css}</style>  <!-- Ensure CSS is included -->
+</head>
+<body>
+    {website.body}
+    <script>{website.js}</script>  <!-- Ensure JS is included -->
+</body>
+</html>"""
+
+    # Split full code into lines for proper display
+    code_lines = full_code.splitlines()
 
     return render(request, 'work/code.html', {
         'website': website,
         'code_lines': code_lines
     })
-
 
 #demo page
 
