@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit - {{ website.title }}</title>
+    <style id="dynamic-style"></style> <!-- Empty style tag -->
+</head>
+<body>
+    <div contenteditable="true" id="editable-body">
+        {{ website.body|safe }}
+    </div>
+</body>
+
+<!-- Inject CSS dynamically -->
+<script>
+    var cssContent = "{{ website.css|escapejs }}"; // Escape properly
+    document.getElementById("dynamic-style").innerHTML = cssContent;
+</script>
+
+<script>{{ website.js|safe }}</script> <!-- Keep JS unchanged -->
+
+<!-- Save Button -->
+<button id="save-btn" style="position:fixed; top:10px; right:10px; padding:10px 20px; background:green; color:white; border:none; cursor:pointer;">
+    Save
+</button>
+
+<script>
+document.getElementById("save-btn").addEventListener("click", function () {
+    const bodyContent = document.getElementById("editable-body").innerHTML;
+
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"  // Ensure CSRF protection
+        },
+        body: new URLSearchParams({
+            "body": bodyContent
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Changes saved successfully!");
+        }
+    });
+});
+</script>
+</html>

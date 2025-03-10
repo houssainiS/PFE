@@ -201,3 +201,18 @@ def view_code(request, user_id, website_id):
 def demo(request, user_id, website_id):
     website = get_object_or_404(GeneratedWebsite, id=website_id)
     return render(request, 'work/demo.html', {'website': website})
+
+#editing page
+
+
+def edit_website(request,user_id, website_id):
+    website = get_object_or_404(GeneratedWebsite, id=website_id)
+
+    if request.method == "POST":
+        new_body = request.POST.get("body", "")  # Get the updated body content
+        website.body = new_body  # Update only the body
+        website.save()  # Save changes
+
+        return JsonResponse({"success": True})  # Return success response
+
+    return render(request, "work/edit.html", {"website": website})

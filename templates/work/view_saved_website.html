@@ -61,6 +61,14 @@
     .btn-code:hover {
         background-color: #595959;
     }
+    .btn-edit {
+        background-color: blue;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background-color: #0033cc;
+    }
 </style>
 
 <h2 style="margin-top: 30px;">{{ website.title }}</h2>
@@ -103,6 +111,9 @@
 <div class="button-container" style="text-align: center;">
     <a href="{% url 'work:demo' user.id website.id %}" class="btn btn-demo" target="_blank">Demo</a>
     <a href="{% url 'work:view_code' user.id website.id %}" class="btn btn-code" target="_blank">Code</a>
+    <a href="{% url 'work:edit' user.id website.id %}" class="btn btn-edit" target="_blank">Edit</a>
+
+</div>
 </div>
 
 {% endblock %}
