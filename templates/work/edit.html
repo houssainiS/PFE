@@ -46,5 +46,24 @@ document.getElementById("save-btn").addEventListener("click", function () {
         }
     });
 });
+// Allow image URL editing
+document.getElementById("editable-body").addEventListener("click", function(event) {
+    if (event.target.tagName === 'IMG') {
+        const newSrc = prompt("Enter new image URL:", event.target.src);
+        if (newSrc) {
+            const trimmedSrc = newSrc.trim();
+            
+            // Ensure absolute URL by checking if it starts with http or https
+            if (!/^https?:\/\//i.test(trimmedSrc)) {
+                alert("Please enter a valid absolute URL starting with http:// or https://");
+                return;
+            }
+
+            event.target.src = trimmedSrc;  // Update the image source with the valid absolute URL
+        }
+    }
+});
+
+
 </script>
 </html>

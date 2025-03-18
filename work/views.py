@@ -156,13 +156,14 @@ def save_generated_website(request):
 
 ###################history page
 # History page function
+@login_required
 def history(request, user_id):
     user = get_object_or_404(User, id=user_id)  # Get the user by ID
     saved_websites = GeneratedWebsite.objects.filter(user=user).order_by('-created_at')  # Filter by the logged-in user
     return render(request, 'work/history.html', {'saved_websites': saved_websites})
 
 
-
+@login_required
 def view_saved_website(request, user_id, website_id):
     website = get_object_or_404(GeneratedWebsite, id=website_id)
     return render(request, 'work/view_saved_website.html', {'website': website})
@@ -204,7 +205,7 @@ def demo(request, user_id, website_id):
 
 #editing page
 
-
+@login_required
 def edit_website(request,user_id, website_id):
     website = get_object_or_404(GeneratedWebsite, id=website_id)
 
