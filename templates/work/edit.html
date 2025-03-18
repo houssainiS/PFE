@@ -52,17 +52,27 @@ document.getElementById("editable-body").addEventListener("click", function(even
         const newSrc = prompt("Enter new image URL:", event.target.src);
         if (newSrc) {
             const trimmedSrc = newSrc.trim();
-            
-            // Ensure absolute URL by checking if it starts with http or https
             if (!/^https?:\/\//i.test(trimmedSrc)) {
                 alert("Please enter a valid absolute URL starting with http:// or https://");
                 return;
             }
-
-            event.target.src = trimmedSrc;  // Update the image source with the valid absolute URL
+            event.target.src = trimmedSrc;
+        }
+    } 
+    //urls editing href
+    else if (event.target.tagName === 'A') {
+        const newHref = prompt("Enter new link URL:", event.target.getAttribute("href"));
+        if (newHref) {
+            const trimmedHref = newHref.trim();
+            if (!/^https?:\/\//i.test(trimmedHref) && !/^#/.test(trimmedHref)) {
+                alert("Please enter a valid absolute URL (http:// or https://) or an anchor link (#example)");
+                return;
+            }
+            event.target.href = trimmedHref;
         }
     }
 });
+
 
 
 </script>
