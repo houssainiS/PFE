@@ -113,12 +113,6 @@ def home(request, user_id):
         return redirect('home', user_id=request.user.id)
     return render(request, 'work/home.html', {'user': user})
 
-@login_required(login_url='login')
-def simple_mode(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    if user != request.user:
-        return redirect('home', user_id=request.user.id)
-    return render(request, 'work/simpleMode.html', {'user': user})
 
 @login_required(login_url='login')
 def advanced_mode(request, user_id):
