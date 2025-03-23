@@ -217,3 +217,11 @@ def edit_website(request,user_id, website_id):
         return JsonResponse({"success": True})  # Return success response
 
     return render(request, "work/edit.html", {"website": website})
+
+#delete 1 history 
+
+@login_required
+def delete_website(request, website_id):
+    website = get_object_or_404(GeneratedWebsite, id=website_id, user=request.user)
+    website.delete()
+    return JsonResponse({"success": True})
