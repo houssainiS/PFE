@@ -7,7 +7,7 @@ import environ
 from django.core.exceptions import ImproperlyConfigured
 import os
 import re
-from .models import GeneratedWebsite
+from .models import GeneratedWebsite , Template
 # Initialize environ
 env = environ.Env()
 env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
@@ -223,5 +223,6 @@ def delete_website(request, website_id):
 #templates
 
 @login_required
-def templates(request , user_id):
-    return render(request,"work/templates_page.html")
+def templates(request, user_id):
+    templates = Template.objects.all()
+    return render(request, 'work/templates_page.html', {'templates': templates, 'user_id': user_id})
