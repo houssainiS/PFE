@@ -15,3 +15,14 @@ class GeneratedWebsite(models.Model):
 
     def __str__(self):  # Indentation fixed
         return f"{self.title} - {self.user.username}"
+
+
+class Template(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    theme = models.CharField(max_length=100)
+    code = models.TextField()  # Stores the generated HTML, CSS, and JS
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
