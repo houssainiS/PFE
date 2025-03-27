@@ -226,3 +226,11 @@ def delete_website(request, website_id):
 def templates(request, user_id):
     templates = Template.objects.all()
     return render(request, 'work/templates_page.html', {'templates': templates, 'user_id': user_id})
+
+@login_required
+def view_template(request, user_id, template_id):
+    # Fetch the template based on the provided ID
+    template = get_object_or_404(Template, id=template_id)
+    
+    # You can pass additional context like user information if needed
+    return render(request, 'work/template_view.html', {'template': template, 'user_id': user_id})

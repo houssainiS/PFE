@@ -1,0 +1,109 @@
+{% extends 'work/base.html' %}
+
+{% block title %}{{ template.title }}{% endblock %}
+
+{% block content %}
+    <div class="template-view-container">
+        <h1 class="template-title">{{ template.title }}</h1>
+        <p class="template-description">{{ template.description }}</p>
+
+        <!-- Display the template's website inside an iframe -->
+        <div class="iframe-container">
+            <iframe id="templateIframe" frameborder="0" width="100%" height="500"></iframe>
+        </div>
+
+        <!-- Buttons for Demo and Code -->
+        <div class="template-actions">
+            <a href="{{ template.code }}" class="btn demo-btn" target="_blank">View Code</a>
+            <a href="{% url 'work:demo' user_id=user_id website_id=template.id %}" class="btn demo-btn">Demo</a>
+        </div>
+    </div>
+
+    <!-- JavaScript to inject the code into the iframe -->
+    <script>
+        window.onload = function() {
+            const iframe = document.getElementById('templateIframe');
+            
+            // Get the template code from the Django context
+            const templateCode = `{{ template.code|escapejs }}`;
+
+            // Get the iframe's document
+            const iframeDoc = iframe.contentWindow.document;
+
+            // Open the iframe's document and write the template code
+            iframeDoc.open();
+            iframeDoc.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>{{ template.title }}</title>
+                </head>
+                <body>
+                    ${templateCode}
+                </body>
+                </html>
+            `);
+            iframeDoc.close();
+        }
+    </script>
+
+<style>
+    .template-view-container {
+        text-align: center;
+    }
+    
+    .template-title {
+        font-size: 2em;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .template-description {
+        font-size: 1.2em;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .iframe-container {
+        margin: 30px 0 10px 0;
+    }
+
+    iframe {
+        max-width: 100%;
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .template-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    .demo-btn {
+        background-color: #007bff;
+    }
+
+    .demo-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+
+    

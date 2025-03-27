@@ -16,4 +16,6 @@ urlpatterns = [
     path('<int:user_id>/history/<int:website_id>/edit', views.edit_website, name='edit'),
     path('delete-website/<int:website_id>/', views.delete_website, name='delete_website'),
     path('<int:user_id>/templates', views.templates, name='templates'),
+    path('<int:user_id>/templates/<int:template_id>/', views.view_template, name='see_template'),
+
 ]
