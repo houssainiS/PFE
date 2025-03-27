@@ -16,7 +16,7 @@
         <nav>
             <ul class="nav-links">
                 <li><a href="{% url 'work:home' user.id %}">Home</a></li>
-                    <li><a href="">templates</a></li>
+                    <li><a href="{% url 'work:templates' user.id %}">templates</a></li>
                     <li><a href="{% url 'work:history' user.id %}">history</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'work:logout' %}">Logout</a></li>

@@ -219,3 +219,9 @@ def delete_website(request, website_id):
     website = get_object_or_404(GeneratedWebsite, id=website_id, user=request.user)
     website.delete()
     return JsonResponse({"success": True})
+
+#templates
+
+@login_required
+def templates(request , user_id):
+    return render(request,"work/templates_page.html")
