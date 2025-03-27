@@ -20,7 +20,7 @@ class GeneratedWebsite(models.Model):
 class Template(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    theme = models.CharField(max_length=100)
+    theme = models.CharField(max_length=100 , null=True, blank=True)
     code = models.TextField()  # Stores the generated HTML, CSS, and JS
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='template_images/', null=True, blank=True)

@@ -15,7 +15,7 @@
             {% endif %}
             <h3>{{ template.title }}</h3>
             <p>{{ template.description }}</p>
-            <span class="theme">{{ template.theme }}</span>
+            
             <a href="{% url 'work:see_template' user_id=user.id template_id=template.id %}" class="btn">View</a>
         </div>
         {% empty %}
@@ -65,15 +65,7 @@
         color: #666;
     }
 
-    .theme {
-        display: inline-block;
-        padding: 5px 10px;
-        background: #007bff;
-        color: white;
-        border-radius: 4px;
-        margin-top: 10px;
-    }
-
+    
     .btn {
         display: block;
         margin-top: 10px;
