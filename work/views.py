@@ -238,3 +238,12 @@ def view_template(request, user_id, template_id):
 def template_demo(request, user_id, website_id):
     template = get_object_or_404(Template, id=website_id)
     return render(request, 'work/template_demo.html', {'template': template})
+
+@login_required
+def template_code(request, user_id, website_id):
+    template = get_object_or_404(Template, id=website_id)
+    code_lines = template.code.splitlines()
+    return render(request, 'work/template_code.html', {
+        'template': template,
+        'code_lines': code_lines,
+    })
