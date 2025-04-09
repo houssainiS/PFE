@@ -17,5 +17,6 @@ urlpatterns = [
     path('delete-website/<int:website_id>/', views.delete_website, name='delete_website'),
     path('<int:user_id>/templates', views.templates, name='templates'),
     path('<int:user_id>/templates/<int:template_id>/', views.view_template, name='see_template'),
+     path('demo/<int:user_id>/<int:website_id>/', views.template_demo, name='template_demo'),
 
 ]

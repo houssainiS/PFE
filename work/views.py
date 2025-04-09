@@ -234,3 +234,7 @@ def view_template(request, user_id, template_id):
     
     # You can pass additional context like user information if needed
     return render(request, 'work/template_view.html', {'template': template, 'user_id': user_id})
+@login_required
+def template_demo(request, user_id, website_id):
+    template = get_object_or_404(Template, id=website_id)
+    return render(request, 'work/template_demo.html', {'template': template})

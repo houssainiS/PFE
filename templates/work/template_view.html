@@ -15,7 +15,7 @@
         <!-- Buttons for Demo and Code -->
         <div class="template-actions">
             <a href="{{ template.code }}" class="btn demo-btn" target="_blank">View Code</a>
-            <a href="{% url 'work:demo' user_id=user_id website_id=template.id %}" class="btn demo-btn">Demo</a>
+            <a href="{% url 'work:template_demo' user_id=user_id website_id=template.id %}" class="btn demo-btn">Demo</a>
         </div>
     </div>
 
