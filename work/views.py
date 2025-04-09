@@ -247,3 +247,48 @@ def template_code(request, user_id, website_id):
         'template': template,
         'code_lines': code_lines,
     })
+
+@login_required
+def save_template(request, user_id, website_id):
+    # Get the template object
+    template = get_object_or_404(Template, id=website_id)
+
+    # The full template code
+    template_code = template.code
+
+    # Regular expressions to match content inside <body>, <style>, and <script> tags
+    body_pattern = re.compile(r'<body.*?>(.*?)</body>', re.DOTALL)
+    style_pattern = re.compile(r'<style.*?>(.*?)</style>', re.DOTALL)
+    script_pattern = re.compile(r'<script.*?>(.*?)</script>', re.DOTALL)
+
+    # Extract content for body, style, and script using regex
+    body_content = re.search(body_pattern, template_code)
+    style_content = re.search(style_pattern, template_code)
+    script_content = re.search(script_pattern, template_code)
+
+    # Set to empty string if not found
+    body_content = body_content.group(1) if body_content else ''
+    style_content = style_content.group(1) if style_content else ''
+    script_content = script_content.group(1) if script_content else ''
+
+    # Check if title is provided via AJAX
+    if request.method == "POST":
+        title = request.POST.get('title')  # Get title from the form
+
+        if title:
+            # Save the content in the GeneratedWebsite model
+            generated_website = GeneratedWebsite.objects.create(
+                user=request.user,
+                title=title,
+                body=body_content,
+                css=style_content,
+                js=script_content,
+                prompt="Its a Saved Template not a generated Website"  # Save the original template code as prompt
+            )
+
+            # Redirect the user or return a response as needed
+            return redirect('work:see_template', user_id=user_id, template_id=website_id)
+
+
+    # If no title provided (or GET request), just redirect back
+    return redirect('work:see_template', user_id=user_id, template_id=website_id)

@@ -15,7 +15,8 @@
         <!-- Buttons for Demo and Code -->
         <div class="template-actions">
             <a href="{% url 'work:template_code' user_id=user_id website_id=template.id %}" class="btn demo-btn" target="_blank">View Code</a>
-            <a href="{% url 'work:template_demo' user_id=user_id website_id=template.id %}" class="btn demo-btn">Demo</a>
+            <a href="{% url 'work:template_demo' user_id=user_id website_id=template.id %}" class="btn demo-btn" target="_blank">Demo</a>
+            <button id="saveTemplateBtn" class="btn">Save Template</button>
         </div>
     </div>
 
@@ -47,63 +48,90 @@
             `);
             iframeDoc.close();
         }
+
+        // Function to save the template
+        document.getElementById('saveTemplateBtn').addEventListener('click', function() {
+            const title = prompt('Please enter a title for your template:');
+
+            if (title) {
+                // Create a form and submit it with the title
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{% url 'work:save_template' user_id=user_id website_id=template.id %}";
+
+                // Create the title input field
+                const titleInput = document.createElement('input');
+                titleInput.type = 'hidden';
+                titleInput.name = 'title';
+                titleInput.value = title;
+                form.appendChild(titleInput);
+
+                // Add CSRF token to the form
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                form.appendChild(csrfToken);
+
+                // Submit the form
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
     </script>
 
-<style>
-    .template-view-container {
-        text-align: center;
-    }
-    
-    .template-title {
-        font-size: 2em;
-        color: #333;
-        margin-bottom: 20px;
-    }
+    <style>
+        .template-view-container {
+            text-align: center;
+        }
+        
+        .template-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-    .template-description {
-        font-size: 1.2em;
-        color: #555;
-        margin-bottom: 30px;
-    }
+        .template-description {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 30px;
+        }
 
-    .iframe-container {
-        margin: 30px 0 10px 0;
-    }
+        .iframe-container {
+            margin: 30px 0 10px 0;
+        }
 
-    iframe {
-        max-width: 100%;
-        border: none;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+        iframe {
+            max-width: 100%;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .template-actions {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-    }
+        .template-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
 
-    .btn {
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-    }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
 
-    .btn:hover {
-        background-color: #45a049;
-    }
+        .btn:hover {
+            background-color: #45a049;
+        }
 
-    .demo-btn {
-        background-color: #007bff;
-    }
+        .demo-btn {
+            background-color: #007bff;
+        }
 
-    .demo-btn:hover {
-        background-color: #0056b3;
-    }
-</style>
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 {% endblock %}
-
-
-    
