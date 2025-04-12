@@ -24,5 +24,7 @@ class Template(models.Model):
     code = models.TextField()  # Stores the generated HTML, CSS, and JS
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='template_images/', null=True, blank=True)
+    free = models.BooleanField(default=True)
+
     def __str__(self):
         return self.title
