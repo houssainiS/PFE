@@ -1,11 +1,15 @@
 {% extends 'work/base.html' %}
 
-{% block title %}Advanced Mode{% endblock %}
+{% block title %}housAI | Web Generating{% endblock %}
+{% block shortname %}  {{ user.username|slice:":2" }} {% endblock %}
+
 
 {% block content %}
 <div id="loadingIndicator" class="loading-spinner" style="display: none;">
-    Generating...
+    <div class="spinner"></div>
+    <p>Generating your website...</p>
 </div>
+
 
 <div id="generatedContent" class="generated-content">
     <!-- This iframe will display the generated website -->
@@ -23,7 +27,13 @@
     </button>
 
     <!-- Save button initially hidden -->
-    <button id="saveButton" class="save-button" style="display: none;" onclick="showSaveModal()">Save</button>
+    <button id="saveButton" class="save-button" style="display: none;" onclick="showSaveModal()">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        Save</button>
 </div>
 
 <!-- Modal for entering title -->
@@ -63,7 +73,7 @@
         generateButton.innerHTML = "Loading...";
         generateButton.disabled = true;
         userMessage.disabled = true; // Disable input during loading
-        loadingIndicator.style.display = "block"; // Show loading indicator
+        loadingIndicator.style.display = "flex"; // Show loading indicator
 
         fetch(`/work/${userId}/advancedMode/getResponse?userMessage=${encodeURIComponent(userMessage.value)}&generateImages=${generateImages}`)
             .then(response => response.json())
@@ -163,10 +173,13 @@ document.getElementById('cancelButton').addEventListener('click', () => closePop
 
 <style>
     html, body { overflow-x: hidden; }
-    
+    .bg-shapes{
+        display: none;
+    }
     .generated-content {
+        margin-top: 110px;
         width: 100%;
-        height: 80vh;
+        height: 70vh;
         margin-bottom: 20px;
         border: 1px solid #ccc;
         border-radius: 8px;
@@ -204,40 +217,58 @@ document.getElementById('cancelButton').addEventListener('click', () => closePop
         cursor: pointer;
         border: none;
         border-radius: 8px;
-        background-color: #4CAF50;
+        background-color: #6366f1;
         color: white;
         transition: background-color 0.3s ease;
     }
 
     .generate-button:hover {
-        background-color: #45a049;
+        background-color: #8b5cf6;
     }
 
     .save-button {
-        padding: 12px 20px;
+        display: inline-flex;
+        padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
         border: none;
         border-radius: 8px;
-        background-color: #2196F3;
-        color: white;
         margin-left: 10px;
         transition: background-color 0.3s ease;
+        background-color: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--color-foreground-muted);
     }
 
     .save-button:hover {
-        background-color: #1976D2;
+        border: 1px solid #6366F1;
     }
 
+    
     .loading-spinner {
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        color: #4CAF50;
-        margin: 20px;
-        animation: blink 1s infinite;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
     }
 
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--color-gray-200);
+        border-top: 4px solid var(--color-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
     @keyframes blink {
         0% { opacity: 1; }
         50% { opacity: 0.5; }

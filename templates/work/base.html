@@ -36,9 +36,9 @@
             
             <nav class="nav">
                 <ul class="nav-links">
-                    <li><a href="{% url 'work:home' user.id %}" class="active">Home</a></li>
-                    <li><a href="{% url 'work:templates' user.id %}">Templates</a></li>
-                    <li><a href="{% url 'work:history' user.id %}">Saved</a></li>
+                    <li><a href="{% url 'work:home' user.id %}" {% block navactivehome %}{% endblock %}>Home</a></li>
+                    <li><a href="{% url 'work:templates' user.id %}" {% block navactivetemplates%}{% endblock %}>Templates</a></li>
+                    <li><a href="{% url 'work:history' user.id %}" {% block navactivehistory %}{% endblock %}>Saved</a></li>
                 </ul>
                 <div class="user-menu">
                     <div class="user-avatar">
@@ -83,8 +83,8 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <ul class="mobile-nav-links">
-                <li><a href="{% url 'work:home' user.id %}" class="active">Home</a></li>
-                <li><a href="{% url 'work:templates' user.id %}">Templates</a></li>
+                <li><a href="{% url 'work:home' user.id %}" >Home</a></li>
+                <li><a href="{% url 'work:templates' user.id %}" >Templates</a></li>
                 <li><a href="{% url 'work:history' user.id %}">Saved</a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="settings.html">Settings</a></li>

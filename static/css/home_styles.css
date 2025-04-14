@@ -221,19 +221,7 @@
     border-color: var(--color-primary);
 }
 
-.website-preview {
-    width: 120px;
-    height: 80px;
-    border-radius: var(--border-radius-sm);
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-}
 
-.website-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 
 .website-info {
     flex: 1;
@@ -388,10 +376,6 @@
         text-align: center;
     }
     
-    .website-preview {
-        width: 100%;
-        height: 120px;
-    }
     
     .website-actions {
         justify-content: center;
