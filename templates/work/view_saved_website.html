@@ -1,7 +1,14 @@
 {% extends 'work/base.html' %}
 
+{% block title %}housAI | Saved{% endblock %}
+{% block shortname %}  {{ user.username|slice:":2" }} {% endblock %}
+{% block navactivetemplates %}class="active"{% endblock %}
+
 {% block content %}
 <style>
+    .bg-shapes{
+        display: none;
+    }
     /* General styles */
     body {
         font-family: Arial, sans-serif;

@@ -1,6 +1,8 @@
 {% extends 'work/base.html' %}
 
 {% block title %}{{ template.title }}{% endblock %}
+{% block shortname %}  {{ user.username|slice:":2" }} {% endblock %}
+{% block navactivetemplates %}class="active"{% endblock %}
 
 {% block content %}
     <div class="template-view-container">
@@ -81,6 +83,10 @@
     </script>
 
     <style>
+        .bg-shapes{
+        display: none;
+    }
+
         .template-view-container {
             text-align: center;
         }
