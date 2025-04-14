@@ -18,13 +18,30 @@ class GeneratedWebsite(models.Model):
 
 
 class Template(models.Model):
+    CATEGORY_CHOICES = [
+        ('business', 'Business'),
+        ('portfolio', 'Portfolio'),
+        ('ecommerce', 'E-commerce'),
+        ('blog', 'Blog'),
+        ('landing', 'Landing Page'),
+        ('other', 'Other'),
+    ]
+
     title = models.CharField(max_length=255)
     description = models.TextField()
-    theme = models.CharField(max_length=100 , null=True, blank=True)
-    code = models.TextField()  # Stores the generated HTML, CSS, and JS
+    theme = models.CharField(max_length=100, null=True, blank=True)
+    code = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='template_images/', null=True, blank=True)
     free = models.BooleanField(default=True)
+    tags = models.JSONField(default=list, blank=True)
+
+    category = models.CharField(
+        max_length=100,
+        choices=CATEGORY_CHOICES,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.title
