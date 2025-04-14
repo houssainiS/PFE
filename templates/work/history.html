@@ -1,13 +1,15 @@
 {% extends 'work/base.html' %}
 
-{% block title %}Saved Generations{% endblock %}
+{% block title %}Saved Websites{% endblock %}
+{% block shortname %}  {{ user.username|slice:":2" }} {% endblock %}
+{% block navactivehistory %}class="active"{% endblock %}
 
 {% block content %}
 <main class="saved-websites-container">
     <div class="container">
         <div class="saved-websites-header">
             <h1>Saved Generations</h1>
-            <p>Your collection of generated websites saved for future reference</p>
+            <p>Your collection of Websites saved for future reference</p>
         </div>
 
         {% if saved_websites %}
