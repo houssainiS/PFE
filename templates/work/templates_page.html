@@ -1,7 +1,7 @@
 {% extends 'work/base.html' %}
 
 {% block title %}housAI | Templates{% endblock %}
-{% block shortname %}  {{ user.username|slice:":2" }} {% endblock %}
+{% block shortname %}{{ user.username|slice:":2"|upper }}{% endblock %}
 {% block navactivetemplates %}class="active"{% endblock %}
 
 {% block content %}

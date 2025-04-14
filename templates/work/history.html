@@ -1,7 +1,7 @@
 {% extends 'work/base.html' %}
 
 {% block title %}Saved Websites{% endblock %}
-{% block shortname %}  {{ user.username|slice:":2" }} {% endblock %}
+{% block shortname %}{{ user.username|slice:":2"|upper }}{% endblock %}
 {% block navactivehistory %}class="active"{% endblock %}
 
 {% block content %}
