@@ -71,7 +71,14 @@
                 <div class="profile-card">
                     <div class="card-header">
                         <h3>Subscription Plan</h3>
-                        
+                        <a href="{% url 'login:subscription_plans' %}">
+                            <button class="btn btn-outline btn-small">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                                <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                            </svg>
+                            Upgrade
+                        </a>
+                        </button>
                     </div>
                     <div class="subscription-info">
                         <div class="current-plan">
