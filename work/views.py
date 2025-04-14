@@ -292,3 +292,11 @@ def save_template(request, user_id, website_id):
 
     # If no title provided (or GET request), just redirect back
     return redirect('work:see_template', user_id=user_id, template_id=website_id)
+
+
+
+
+#profile & settings 
+
+def profile_view(request,user_id):
+    return render(request, 'work/profile.html')

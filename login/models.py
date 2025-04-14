@@ -7,17 +7,15 @@ class User(AbstractUser):
         ('admin', 'Admin'),
         ('normal', 'Normal'),
     ]
-    role = models.CharField(max_length=100, choices=ROLE_CHOICES, default='normal')  # Default to 'normal'
-
-
+    
     class Meta:
         db_table = 'user'  # Set the table name to 'user'
 
 class Subscription(models.Model):
     PLAN_CHOICES = [
         ('free', 'Free'),
-        ('basic', 'Basic'),
         ('pro', 'Pro'),
+        ('premium', 'Premium'),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link to custom user model

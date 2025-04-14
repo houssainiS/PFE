@@ -20,6 +20,7 @@ urlpatterns = [
     path('demo/<int:user_id>/<int:website_id>/', views.template_demo, name='template_demo'),
     path('code/<int:user_id>/<int:website_id>/', views.template_code, name='template_code'),
     path('save_template/<int:user_id>/<int:website_id>/', views.save_template, name='save_template'),
+    path('profile/<int:user_id>', views.profile_view, name='profile'),
 
 
 ]

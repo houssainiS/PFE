@@ -45,7 +45,7 @@
                         <span>{% block shortname %}t{% endblock %}</span>
                     </div>
                     <div class="user-dropdown">
-                        <a href="profile.html" class="dropdown-item">
+                        <a href="{% url 'work:profile' user.id %}" class="dropdown-item">
                             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
@@ -86,7 +86,7 @@
                 <li><a href="{% url 'work:home' user.id %}" >Home</a></li>
                 <li><a href="{% url 'work:templates' user.id %}" >Templates</a></li>
                 <li><a href="{% url 'work:history' user.id %}">Saved</a></li>
-                <li><a href="profile.html">Profile</a></li>
+                <li><a href="{% url 'work:profile' user.id %}">Profile</a></li>
                 <li><a href="settings.html">Settings</a></li>
                 
                 <li>{% if user.is_authenticated %}
