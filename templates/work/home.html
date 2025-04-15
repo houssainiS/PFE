@@ -71,7 +71,11 @@
                     </svg>
                 </div>
                 <div class="stat-content">
-                    <h3>Pro</h3>
+                    <h3>{% if user.subscription.plan  %}
+                        {{ user.subscription.plan |title }}
+                    {% else %}
+                        Free
+                    {% endif %}</h3>
                     <p>Current Plan</p>
                 </div>
             </div>
