@@ -69,7 +69,7 @@
             </svg>
             <h3>No saved generations yet</h3>
             <p>When you save a generated website, it will appear here for easy access.</p>
-            <a href="{% url 'work:create' %}" class="btn btn-primary">Create a Website</a>
+            <a href="{% url 'work:advanced_mode' user.id %}" class="btn btn-primary">Create a Website</a>
         </div>
         {% endif %}
     </div>
