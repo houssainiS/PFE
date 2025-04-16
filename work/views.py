@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 from login.models import User
 import openai
 from django.http import JsonResponse
@@ -8,6 +9,8 @@ from django.core.exceptions import ImproperlyConfigured
 import os
 import re
 from .models import GeneratedWebsite , Template
+
+
 # Initialize environ
 env = environ.Env()
 env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
@@ -300,3 +303,68 @@ def save_template(request, user_id, website_id):
 
 def profile_view(request,user_id):
     return render(request, 'work/profile.html')
+
+
+
+@login_required
+def settings_view(request):
+    return render(request, 'work/settings.html')
+
+
+@login_required
+def update_settings(request):
+    if request.method == 'POST':
+        new_username = request.POST['username']
+        new_email = request.POST['email']
+
+        # Check if the new username already exists
+        if User.objects.filter(username=new_username).exclude(id=request.user.id).exists():
+            return render(request, 'work/settings.html', {'username_error': 'Username is already taken.'})
+
+        # Check if the new email already exists
+        if User.objects.filter(email=new_email).exclude(id=request.user.id).exists():
+            return render(request, 'work/settings.html', {'email_error': 'Email is already in use.'})
+
+        # Update the username and email if no duplicates
+        request.user.username = new_username
+        request.user.email = new_email
+        request.user.save()
+
+        success = True
+        return render(request, 'work/settings.html', {'profile_updated': True, 'success': success})
+
+    return render(request, 'work/settings.html')
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST' and 'old_password' in request.POST:
+        user = request.user
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Check if the old password is correct
+        if not user.check_password(old_password):
+            return render(request, 'work/settings.html', {'password_error': True})
+
+        # Check if the new passwords match
+        if new_password != confirm_password:
+            return render(request, 'work/settings.html', {'password_mismatch': True})
+
+        # Set the new password and save it
+        user.set_password(new_password)
+        user.save()
+
+        # Update session hash after password change
+        update_session_auth_hash(request, user)
+
+        return render(request, 'work/settings.html', {'password_updated': True})
+
+    return render(request, 'work/settings.html')
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        request.user.delete()
+        return redirect('login:login')  # Or homepage

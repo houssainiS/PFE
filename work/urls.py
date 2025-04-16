@@ -21,6 +21,9 @@ urlpatterns = [
     path('code/<int:user_id>/<int:website_id>/', views.template_code, name='template_code'),
     path('save_template/<int:user_id>/<int:website_id>/', views.save_template, name='save_template'),
     path('profile/<int:user_id>', views.profile_view, name='profile'),
-
+    path('settings/', views.settings_view, name='settings'),
+    path('settings/update/', views.update_settings, name='update_settings'),
+    path('settings/change-password/', views.change_password, name='change_password'),
+    path('settings/delete/', views.delete_account, name='delete_account'),
 
 ]
