@@ -2,6 +2,11 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User, Subscription
 
+#unregister group
+from django.contrib.auth.models import Group
+admin.site.unregister(Group)
+
+
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('user', 'plan', 'is_active', 'start_date', 'end_date')
@@ -20,3 +25,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets  # No extra fields for now
 
 admin.site.register(User, CustomUserAdmin)
+
+admin.site.site_header = "housAI"
+admin.site.site_title = "housAI"
+admin.site.index_title = "Welcome to housAI"
