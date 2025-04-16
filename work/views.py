@@ -53,14 +53,17 @@ def ask_openai(message):
 Return only the **contents** of the following tags, and always include all three even if they're empty: `<body>`, `<style>`, and `<script>` — e.g., `<script></script>`.
 
 Instructions:
-- The `<body>` should contain clean, semantic HTML structure with well-labeled sections.
-- Use responsive HTML and CSS best practices (e.g., flexbox/grid layout, media queries, scalable images, relative units like %, rem, or em).
-- The `<style>` tag must include internal CSS that ensures the layout works well on mobile, tablet, and desktop screen sizes using media queries.
-- Any `<img>` tag must include an `alt` attribute describing the image content (e.g., `alt="A woman working on a laptop"`).
-- The `<script>` tag must include necessary JavaScript (if any) or remain empty.
-- Do **not** include `<html>`, `<head>`, `<title>`, or any external files (no `<link>` or `<script src=...>`).
+- The `<body>` should contain clean, semantic HTML structure with well-labeled sections and use appropriate HTML5 elements (e.g., <header>, <nav>, <section>, <main>, <footer>).
+- Use responsive HTML and CSS best practices (flexbox/grid layout, media queries, scalable units like %, rem, em). Prioritize mobile-first design.
+- All layout styling must be included inside the `<style>` tag using **internal CSS only**. Do not use inline styles or external files.
+- The `<style>` must ensure cross-device responsiveness (mobile, tablet, desktop) and use accessible contrast ratios and modern fonts.
+- Any `<img>` must include a descriptive `alt` attribute.
+- The `<script>` tag must include **working internal JavaScript** (if the design includes interactivity like toggles, modals, dropdowns, etc.), otherwise leave it empty.
+- If there is interactive behavior (menus, modals, toggles), ensure the JS code properly adds/removes classes, and is scoped only to the included HTML.
+- Do **not** include `<html>`, `<head>`, `<title>`, or any external links like `<link>` or `<script src=...>`.
+- Do not use frameworks like Bootstrap or libraries like jQuery.
 
-Output format: strictly return only the `<body>`, then `<style>`, then `<script>` tags — in that order.
+Output format: strictly return the `<body>`, then `<style>`, then `<script>` tags — in that order, and nothing else.
 """
 
     response = openai.chat.completions.create(
