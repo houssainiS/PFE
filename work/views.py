@@ -48,12 +48,25 @@ def ask_dalle_2(prompt):
 
 def ask_openai(message):
     """Generates the HTML, CSS, and JS from OpenAI based on user input."""
-    prompt = f"Please generate the complete HTML code for a website based on the following description: {message}. Only include the contents inside the `<body>`, `<script>`, and `<style>` tags. The `<style>` tag should include the necessary CSS for layout, colors, fonts, and spacing, or be left empty if no styles are needed. The `<script>` tag should contain any JavaScript functionality, or be left empty if no JavaScript is required. Do not include the overall HTML structure, such as `<html>`, `<head>`, or external file references (no `<link>` or `<script src=...>` tags). Only provide the contents inside the `<body>`, `<script>`, and `<style>` tags."
+    prompt = f"""Generate a high-quality, responsive website layout based on the following description: {message}.
+
+Return only the **contents** of the following tags, and always include all three even if they're empty: `<body>`, `<style>`, and `<script>` — e.g., `<script></script>`.
+
+Instructions:
+- The `<body>` should contain clean, semantic HTML structure with well-labeled sections.
+- Use responsive HTML and CSS best practices (e.g., flexbox/grid layout, media queries, scalable images, relative units like %, rem, or em).
+- The `<style>` tag must include internal CSS that ensures the layout works well on mobile, tablet, and desktop screen sizes using media queries.
+- Any `<img>` tag must include an `alt` attribute describing the image content (e.g., `alt="A woman working on a laptop"`).
+- The `<script>` tag must include necessary JavaScript (if any) or remain empty.
+- Do **not** include `<html>`, `<head>`, `<title>`, or any external files (no `<link>` or `<script src=...>`).
+
+Output format: strictly return only the `<body>`, then `<style>`, then `<script>` tags — in that order.
+"""
 
     response = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=1500,
+        max_tokens=5000,
         temperature=0.5,
     )
     return response.choices[0].message.content.strip()

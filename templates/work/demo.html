@@ -10,14 +10,15 @@
     {{ website.body|safe }}
     
     <script>
-        // Get the CSS content passed from Django (using safe filter to avoid auto-escaping)
+        // Inject CSS into <style> tag
         var cssContent = "{{ website.css|escapejs }}";
-
-        // Append the CSS content to the dynamic <style> tag
         var styleTag = document.getElementById('dynamic-style');
         styleTag.innerHTML = cssContent;
     </script>
 
-    <script>{{ website.js|safe }}</script> <!-- Your JS code -->
+    <!-- Inject JS directly -->
+    <script>
+        {{ website.js|safe }}
+    </script>
 </body>
 </html>
