@@ -87,7 +87,7 @@
                 <li><a href="{% url 'work:templates' user.id %}" >Templates</a></li>
                 <li><a href="{% url 'work:history' user.id %}">Saved</a></li>
                 <li><a href="{% url 'work:profile' user.id %}">Profile</a></li>
-                <li><a href="settings.html">Settings</a></li>
+                <li><a href="{% url 'work:settings' %}">Settings</a></li>
                 
                 <li>{% if user.is_authenticated %}
                     <a href="{% url 'work:logout' %}">Logout</a>{% endif %} 
