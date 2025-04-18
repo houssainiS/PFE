@@ -61,7 +61,7 @@
                         </a>
                         <div class="dropdown-divider"></div>
                         {% if user.is_authenticated %}
-                        <a href="{% url 'work:logout' %}" class="dropdown-item">
+                        <a href="" class="dropdown-item" id="logout">
                             {% endif %}    
                             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -90,12 +90,14 @@
                 <li><a href="{% url 'work:settings' %}">Settings</a></li>
                 
                 <li>{% if user.is_authenticated %}
-                    <a href="{% url 'work:logout' %}">Logout</a>{% endif %} 
+                    <a href="" id="logout-mobile">Logout</a>{% endif %} 
                 </li>
-                   
             </ul>
         </div>
     </header>
+    <form id="logout-form" method="POST" action="{% url 'login:logout' %}" style="display: none;">
+        {% csrf_token %}
+    </form>
     {% block content %}
         {% endblock %}
     
@@ -135,6 +137,16 @@
                 });
             });
         });
+
+//logout code
+        document.getElementById("logout").addEventListener("click", function(e) {
+    e.preventDefault();
+    document.getElementById("logout-form").submit();
+});
+document.getElementById("logout-mobile").addEventListener("click", function(e) {
+    e.preventDefault();
+    document.getElementById("logout-form").submit();
+});
     </script>
 </body>
 </html>
