@@ -27,16 +27,19 @@
     <!-- Header -->
     <header class="header dashboard-header">
         <div class="container">
-            <div class="logo">
+            <a href="{% url 'work:home' user.id %}">
+                <div class="logo">
                 <div class="logo-mark">
                     <img src="{% static 'images/logo.png' %}" alt="logo" class="logo-mark">
                 </div>
                 <span>housAI</span>
             </div>
+            </a>
+            
             
             <nav class="nav">
                 <ul class="nav-links">
-                    <li><a href="{% url 'work:home' user.id %}" {% block navactivehome %}{% endblock %}>Home</a></li>
+                    <li><a href="{% url 'work:advanced_mode' user.id %}" {% block navactivegenerate %}{% endblock %}>Generate</a></li>
                     <li><a href="{% url 'work:templates' user.id %}" {% block navactivetemplates%}{% endblock %}>Templates</a></li>
                     <li><a href="{% url 'work:history' user.id %}" {% block navactivehistory %}{% endblock %}>Saved</a></li>
                 </ul>
@@ -83,7 +86,7 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <ul class="mobile-nav-links">
-                <li><a href="{% url 'work:home' user.id %}" >Home</a></li>
+                <li><a href="{% url 'work:advanced_mode' user.id %}" >Generate</a></li>
                 <li><a href="{% url 'work:templates' user.id %}" >Templates</a></li>
                 <li><a href="{% url 'work:history' user.id %}">Saved</a></li>
                 <li><a href="{% url 'work:profile' user.id %}">Profile</a></li>
